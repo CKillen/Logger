@@ -1,4 +1,6 @@
 # Logs
+**/server
+**/temp-test
 logs
 *.log
 npm-debug.log*
