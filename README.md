@@ -3,7 +3,7 @@ A way to help developer get logs directly from their user in production
 environments, without changing their code flow. It also makes console commands
 prettier in development.
 
-# User
+# How it works
 Logger42 overwrites the console window object, allowing your code to work 
 without changes. To use Logger42, you simply include it in a script tag ABOVE 
 your other scripts. Then at the top of your first js script decalre the logger42 
@@ -34,12 +34,12 @@ flag defaults to dev
 * storageName: 'logger-42_logs' //unique name for local storage
 * storageSize 1.5 * 1000 * 1000 //bytes
 * headers: { 'Content-Type': 'application/json' } //Will always append this
-* logColors {
-..*   log: '#9DAB86'
-..*   warn: '#FFE45E'
-..*   error: 'FF686B'
-..*   info: '#95B8D1'
-..*   debug: '#B4846C'
+* logColors {   //This is an object with the following values
+    *   log: '#9DAB86'
+    *   warn: '#FFE45E'
+    *   error: 'FF686B'
+    *   info: '#95B8D1'
+    *   debug: '#B4846C'
 * }
 
 
