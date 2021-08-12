@@ -32,7 +32,7 @@ flag defaults to dev
 ### Default option object 
 * sendInterval: 60000  //milliseconds
 * storageName: 'logger-42_logs' //unique name for local storage
-* storageSize 1.5 * 1000 * 1000 //bytes
+* storageSize: 1.5 * 1000 * 1000 //bytes
 * headers: { 'Content-Type': 'application/json' } //Will always append this
 * logColors {   //This is an object with the following values
     *   log: '#9DAB86'
@@ -41,6 +41,25 @@ flag defaults to dev
     *   info: '#95B8D1'
     *   debug: '#B4846C'
 * }
+
+### Example with arguments
+```javascript
+new logger42("http://localhost:5000", "production", {
+   sendInterval: 1000 * 20, //send every 20  seconds
+   storageName: 'custom-logger-storage-name',
+   storageSize: .5 * 1000 * 1000, //send if storage is over 500kb 
+   headers: { //application/json will be auto added
+      "Authorization" : "Bearer just an example",
+   },
+   logColors: {
+      log: "green",
+      warn: "yellow",
+      error: "red",
+      info: "blue",
+      debug: "brown",
+   },
+})
+```
 
 
 # Logger42 Goals
@@ -53,21 +72,27 @@ flag defaults to dev
 - [x] send logs if logs grow to over 1.5mb, including on startup
 - [x] allow for flags dev, production, test (only console in dev, only send 
     in prod, both in test)
-- [] plan for which user blocks localStorage
-- [] dump logs to api when an error occurs (set onerror of window) 
+
+---------------------------Version 0.6.0----------------------------------------
+
+- [ ] ESLint
+- [ ] Refactor
+- [ ] Move items to prototypes where approiate 
+
+---------------------------Version 0.7.0----------------------------------------
+
+- [ ] dump error to api when an error occurs (set onerror of window) 
+- [ ] dump snapshot onerror (mousepos, keystrokes, etc) 
+    -Would have to to block username/pass can easily look at text inputs 
+- [ ] plan for when user blocks localStorage
 
 ---------------------------Version 0.8.0----------------------------------------
 
-- [] like to add custom levels
-- [] like to allow option for compressing sent files (Doesn't seem to 
-    be needed, most cases will be below 200kb)
-- [] like to allow all console actions
-- [] like to dump snapshot (mousepos, keystrokes, etc) 
-    -Would have to to block username/pass can easily look at text inputs 
-- [x] like to make console have more info & look nicer (can't do as module)
-- [] like to add pretty log stuff to prototypes
-
+- [ ] add custom levels
+- [ ] compress sent file (most likely not needed)
+- [ ] Support for all console actions (including table)
+- [x] make console have more info & look nicer
 
 ------------------------------ISSUES------------------------------------------
-[] Occasionally line number and file is off (when function is through global
+- [ ] Occasionally line number and file is off (when function is through global
     scope it shows file declared from instead of correct file)
