@@ -75,9 +75,10 @@ new logger42("http://localhost:5000", "production", {
 
 ---------------------------Version 0.6.0----------------------------------------
 
-- [ ] ESLint
-- [ ] Refactor
+- [x] ESLint
+- [x] Refactor
 - [ ] Move items to prototypes where approiate 
+  * localStorage
 
 ---------------------------Version 0.7.0----------------------------------------
 
@@ -91,6 +92,7 @@ new logger42("http://localhost:5000", "production", {
 - [ ] add custom levels
 - [ ] compress sent file (most likely not needed)
 - [ ] Support for all console actions (including table)
+  * Error should produce trace
 - [x] make console have more info & look nicer
 
 ------------------------------ISSUES------------------------------------------

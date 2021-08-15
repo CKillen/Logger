@@ -20,9 +20,14 @@ class logger42 {
       info: logColors.info ||'#95B8D1',
       debug: logColors.debug ||'#B4846C',
     };
+
     this.configureConsole(this);
+
     if(flag === 'production' || flag === 'test') {
-      this.apiInterval = setInterval(this.sendToApi, this.sendInterval);
+      this.apiInterval = setInterval(this.sendStorageToApi, this.sendInterval);
+      window.addEventListener("error", (error) => {
+        this.sendErrorToApi(error);
+      });
       this.sendOversizedLogs();
     }
   }
@@ -93,15 +98,15 @@ class logger42 {
     let lineInfo = new Error().stack;
     let file = `File: ${this.getLastFilename(lineInfo)}`;
     let lineNumber = `Line: ${this.getLastLineNumber(lineInfo)}`;
-    oldCons.log(`%c${type.toUpperCase()} | ${file} | ${lineNumber} \n`, this.prettyLog(type), ...text)
+    oldCons[type](`%c${type.toUpperCase()} | ${file} | ${lineNumber} \n`, this.prettyLog(type), ...text)
 
   }
 
   sendOversizedLogs = () => {
     if(this.checkLogSize()) {
       clearInterval(this.apiInterval);
-      this.apiInterval = setInterval(this.sendToApi, this.sendInterval);
-      this.sendToApi();
+      this.apiInterval = setInterval(this.sendStorageToApi, this.sendInterval);
+      this.sendStorageToApi();
     }
   }
 
@@ -111,18 +116,22 @@ class logger42 {
     return itemSize > this.storageSize;
   }
 
-  sendToApi = () => {
+  sendStorageToApi = () => {
     let storageItem = localStorage.getItem(this.storageName);
     if(storageItem !== null) {
-      fetch(this.api, {
-        method: 'POST',
-        body: storageItem,
-        headers: this.headers,
-      })
-      .catch(error => console.error(error))
-      //AJAX goes here, if no url set error out
+      this.sendToApi(storageItem);
       localStorage.removeItem(this.storageName);
     }
+  }
+
+  sendToApi = (item) => {
+    fetch(this.api, {
+      method: 'POST',
+      body: item,
+      headers: this.headers
+    })
+    .catch((error) => console.log(error))
+    //AJAX goes here, if no url set error out
   }
 
   appendToLocalStorage = (logs) => {
@@ -188,5 +197,13 @@ class logger42 {
       stack: error.stack,
     }
     return errorParts;
+  }
+
+  sendErrorToApi = (error) => {
+    //let errorStorage = localStorage.get("log42_error-logs");
+    //set error to be on top of local storage and send
+    let log = this.log("script-error", JSON.stringify(error, ["message", "arguments", "type", "name", "filename", "lineno", "colno"]))
+    this.appendToLocalStorage(log);
+    this.sendStorageToApi();
   }
 }
